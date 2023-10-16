@@ -9,11 +9,11 @@ const ButtonList = () => {
         <div className="flex">
             
             {list.map((name) => 
-                <Button name={name}/>
+                <Button key={name} name={name}/>
             )}
             
         </div>
     );
 };
 
-export default ButtonList
+export default ButtonList;
