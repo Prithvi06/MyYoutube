@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { SEARCH_SUGGESTION_API } from "../utils/config";
-import store from "../utils/store";
 import { cacheResults } from "../utils/searchSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const Head = () => {
     const [searchQuery, setSearchQuery] = useState("")
@@ -45,8 +46,8 @@ const Head = () => {
     }
 
     return (
-        <div className="grid grid-flow-col  px-2 m-2 h-14 shadow-lg sticky top-0 bg-white">
-            <div className="flex col-span-3">
+        <div className="flex justify-between w-full px-5 py-3 shadow-lg fixed top-0 bg-white">
+            <div className="flex ">
                 <img
                     onClick={() => toggleMenuHandler()}
                     className="h-9 cursor-pointer"
@@ -57,27 +58,27 @@ const Head = () => {
                         src="https://www.shutterstock.com/image-vector/youtube-logo-social-media-icon-260nw-2310134969.jpg" alt="youtube-logo" />
                 </a>
             </div>
-            <div className="col-span-8 place-content-center">
+            <div className="basis-2/5">
                 <div>
                     <input value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowsuggestion(true)}
                     onBlur={() => setShowsuggestion(false)}
-                    className="w-3/5 border border-gray-400 px-3 py-2 rounded-l-full" type="text" placeholder="Search" />
-                    <button className="border border-gray-400 p-2 rounded-r-full bg-gray-100">🔍</button>
+                    className="w-11/12 border border-gray-400 px-3 py-2 rounded-l-full" type="text" placeholder="Search" />
+                    <button className="border border-gray-400 p-2 rounded-r-full bg-gray-100"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                 </div>
 
                 {showSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37%] shadow-lg rounded-lg border-gray-100">
                     <ul>
                     {
                         suggestions.map((s) => (
-                            <li key={s} className="py-2 shadow-sm hover:bg-gray-100">🔍 {s}</li>
+                            <li key={s} className="py-2 shadow-sm hover:bg-gray-100"> <FontAwesomeIcon icon={faMagnifyingGlass} /> {s}</li>
                         ))
                     }
                     </ul>
                 </div>)}
             </div>
-            <div className="col-span-1">
+            <div className="">
                 <img
                     className="h-8"
                      src="https://cdn-icons-png.flaticon.com/512/666/666201.png" alt="user-icon" />
