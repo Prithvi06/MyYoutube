@@ -9,13 +9,48 @@ const Sidebar = () => {
     const isMenuOpen = useSelector((store) => store.app.isMenuOpen)
     
     // Early return pattern
-    if (!isMenuOpen) return null; 
-
-    return (
-        <div className="p-2 basis-2/12 shadow-lg overflow-y-scroll fixed bottom-0 top-16 bg-red-50">
+    if (!isMenuOpen) return (
+        <div className="p-2  w-[5%] fixed bottom-0 top-16">
             <ul className="">
             <Link to={"/"}>
-                <li className="flex items-center gap-7 px-5 py-2 bg-gray-100 rounded-xl cursor-pointer">
+                <li className="flex flex-col items-center gap-7 px-5  py-6 bg-gray-100 rounded-xl cursor-pointer">
+                    <FontAwesomeIcon icon={faHouse} className="h-6" />
+                    Home
+                </li>
+            </Link>
+                <li className="flex items-center gap-7 px-5 py-6 hover:bg-gray-100 rounded-xl cursor-pointer">
+                    <FontAwesomeIcon icon={faWandMagicSparkles} />
+                    Shorts
+                </li>
+                <li className="flex items-center gap-7 px-5 py-6 hover:bg-gray-100 rounded-xl cursor-pointer">
+                    <FontAwesomeIcon icon={faTicket} />
+                    Subscriptions
+                </li>
+                <li className="flex items-center gap-7 px-5 py-6 hover:bg-gray-100 rounded-xl cursor-pointer">
+                    <FontAwesomeIcon icon={faUserTie} />
+                    Your channel
+                </li>
+                <li className="flex items-center gap-7 px-5 py-6 hover:bg-gray-100 rounded-xl cursor-pointer">
+                    <FontAwesomeIcon icon={faClockRotateLeft} />
+                    History
+                </li>
+                <li className="flex items-center gap-7 px-5 py-6 hover:bg-gray-100 rounded-xl cursor-pointer">
+                    <FontAwesomeIcon icon={faCirclePlay} />
+                    Your videos
+                </li>
+                <li className="flex items-center gap-7 px-5 py-6 hover:bg-gray-100 rounded-xl cursor-pointer">
+                    <FontAwesomeIcon icon={faClock} />
+                    Watch later
+                </li>
+            </ul>
+        </div>
+    ); 
+
+    return (
+        <div className="p-2  w-[15%] overflow-y-scroll fixed bottom-0 top-16">
+            <ul className="">
+            <Link to={"/"}>
+                <li className="flex items-center gap-7 px-5  py-2 bg-gray-100 rounded-xl cursor-pointer">
                     <FontAwesomeIcon icon={faHouse} />
                     Home
                 </li>
