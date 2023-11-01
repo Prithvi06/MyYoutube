@@ -4,7 +4,7 @@ import { toggleMenu } from "../utils/appSlice";
 import { SEARCH_SUGGESTION_API } from "../utils/config";
 import { cacheResults } from "../utils/searchSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faBell, faVideo, faMicrophone } from "@fortawesome/free-solid-svg-icons";
 
 const Head = () => {
     const [searchQuery, setSearchQuery] = useState("")
@@ -46,7 +46,7 @@ const Head = () => {
     }
 
     return (
-        <div className="flex justify-between w-full px-5 py-3 shadow-lg fixed top-0 bg-white">
+        <div className="flex justify-between w-full px-5 py-2 fixed top-0 bg-white">
             <div className="flex ">
                 <img
                     onClick={() => toggleMenuHandler()}
@@ -58,30 +58,39 @@ const Head = () => {
                         src="https://www.shutterstock.com/image-vector/youtube-logo-social-media-icon-260nw-2310134969.jpg" alt="youtube-logo" />
                 </a>
             </div>
-            <div className="basis-2/5">
-                <div>
+            <div className="basis-[45%]">
+                <div className="w-full flex">
                     <input value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowsuggestion(true)}
                     onBlur={() => setShowsuggestion(false)}
-                    className="w-11/12 border border-gray-400 px-3 py-2 rounded-l-full" type="text" placeholder="Search" />
-                    <button className="border border-gray-400 p-2 rounded-r-full bg-gray-100"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                    className="w-[80%] border border-gray-400 px-3 py-2 rounded-l-full" type="text" placeholder="Search" />
+                    <button className="w-[12%] border border-gray-400 p-2 rounded-r-full bg-gray-100 hover:bg-gray-200"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                    <FontAwesomeIcon icon={faMicrophone} className="w-7 ml-5 p-3 h-5 bg-gray-100 hover:bg-gray-200 rounded-full cursor-pointer" />
                 </div>
 
                 {showSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37%] shadow-lg rounded-lg border-gray-100">
                     <ul>
                     {
                         suggestions.map((s) => (
-                            <li key={s} className="py-2 shadow-sm hover:bg-gray-100"> <FontAwesomeIcon icon={faMagnifyingGlass} /> {s}</li>
+                            <li key={s} className="py-2 shadow-sm hover:bg-gray-100 "> <FontAwesomeIcon icon={faMagnifyingGlass} /> {s}</li>
                         ))
                     }
                     </ul>
                 </div>)}
             </div>
-            <div className="">
-                <img
-                    className="h-8"
-                     src="https://cdn-icons-png.flaticon.com/512/666/666201.png" alt="user-icon" />
+            <div className="flex items-center gap-2">
+                <div>
+                    <FontAwesomeIcon icon={faVideo} className="w-5 h-5 p-3 hover:bg-gray-200 rounded-full cursor-pointer" />
+                </div>
+                <div>
+                    <FontAwesomeIcon icon={faBell} className="w-5 h-5 p-3 hover:bg-gray-200 rounded-full cursor-pointer" />
+                </div>
+                <div>
+                    <img
+                        className="h-8"
+                        src="https://cdn-icons-png.flaticon.com/512/666/666201.png" alt="user-icon" />
+                </div>
             </div>
         </div>
     )
