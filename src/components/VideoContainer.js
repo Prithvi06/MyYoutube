@@ -18,6 +18,14 @@ const VideoContainer = () => {
         setVideos(json.items)
     }
 
+    var infiniteScroll = () => {
+        // End of the document reached?
+        if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight){
+            getVideos();
+            console.log("scrol")
+        }
+    }
+    window.addEventListener('scroll', infiniteScroll());
     return (
         <div className="flex flex-wrap mt-20">
             {
