@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
-import { SEARCH_SUGGESTION_API } from "../utils/config";
+import { SEARCH_SUGGESTION_API, SEARCH_VIDEO_API } from "../utils/config";
 import { cacheResults } from "../utils/searchSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faBell, faVideo, faMicrophone } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Head = () => {
     const [searchQuery, setSearchQuery] = useState("")
     const [suggestions, setSuggestions] = useState([])
+    const [searchVideoQuery, setSearchVideoQuery] = useState("")
+    const [searchVideoResult, setSearchVideoResult] = useState([])
     const [showSuggestion, setShowsuggestion] = useState(false)
 
     const searchCache = useSelector(store => store.search);
@@ -45,6 +48,18 @@ const Head = () => {
         dispatch(toggleMenu())
     }
 
+    useEffect(() => {
+        getVideos();
+    }, [searchVideoQuery]);
+
+    const getVideos = async () => {
+        console.log("searchVideo", searchVideoQuery)
+        const data = await fetch(SEARCH_VIDEO_API.replace("query", searchVideoQuery));
+        const json = await data.json();
+        console.log("search videwo", json?.items)
+        setSearchVideoResult(json.items)
+    }
+
     return (
         <div className="flex justify-between w-full px-5 py-2 fixed top-0 bg-white">
             <div className="flex ">
@@ -69,11 +84,15 @@ const Head = () => {
                     <FontAwesomeIcon icon={faMicrophone} className="w-7 ml-5 p-3 h-5 bg-gray-100 hover:bg-gray-200 rounded-full cursor-pointer" />
                 </div>
 
-                {showSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37%] shadow-lg rounded-lg border-gray-100">
+                {showSuggestion && (<div className="fixed z-10 bg-white py-2 w-[37%] shadow-lg rounded-lg border-gray-100">
                     <ul>
                     {
                         suggestions.map((s) => (
-                            <li key={s} className="py-2 shadow-sm hover:bg-gray-100 "> <FontAwesomeIcon icon={faMagnifyingGlass} /> {s}</li>
+                            <Link to={"/result"} >
+                                <li key={s} onClick={() => setSearchVideoQuery(s)} className="py-2 shadow-sm px-2 hover:bg-gray-100 cursor-pointer">
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} /> {s}</li>
+                            </Link>
+                        
                         ))
                     }
                     </ul>
