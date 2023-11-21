@@ -35,27 +35,27 @@ const LiveChat = () => {
     const ChatMessages = useSelector((store) => store.chat.messages)
 
     useEffect(() => {
-        const i = setInterval(() => {
-            // API Polling
-            console.log("API Polling")
-            dispatch(addMessage({
-                name: generateRandomName(),
-                message: "Good morning 🙏"
-            }))
-        }, 3000);
-        return () => clearInterval(i);
+        // const i = setInterval(() => {
+        //     // API Polling
+        //     console.log("API Polling")
+        //     dispatch(addMessage({
+        //         name: generateRandomName(),
+        //         message: "Good morning 🙏"
+        //     }))
+        // }, 3000);
+        // return () => clearInterval(i);
     }, []);
 
     return (
         <>
-        <div className="w-full h-[500px] ml-2 p-2 border border-black bg-slate-100 rounded-lg overflow-y-scroll flex flex-col-reverse">
+        <div className="h-[450px] border border-black bg-slate-100 rounded-lg overflow-y-scroll flex flex-col-reverse">
                 {
                     ChatMessages.map((c, index) => (
                         <ChatMessage key={index} name={c.name} message={c.message} />
                     ))
                 }
         </div>
-        <form className="w-full p-2 ml-2 border border-black rounded-lg"
+        <form className="w-full p-2 flex border border-black rounded-lg"
             onSubmit={(e) => {
                 e.preventDefault()
                 dispatch(addMessage({
