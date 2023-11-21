@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleMenu } from "../utils/appSlice";
-import { SEARCH_SUGGESTION_API, SEARCH_VIDEO_API } from "../utils/config";
+import { toggleMenu, closeButtonList } from "../utils/appSlice";
+import { SEARCH_SUGGESTION_API } from "../utils/config";
 import { cacheResults } from "../utils/searchSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faBell, faVideo, faMicrophone } from "@fortawesome/free-solid-svg-icons";
@@ -10,8 +10,6 @@ import { Link } from "react-router-dom";
 const Head = () => {
     const [searchQuery, setSearchQuery] = useState("")
     const [suggestions, setSuggestions] = useState([])
-    const [searchVideoQuery, setSearchVideoQuery] = useState("")
-    const [searchVideoResult, setSearchVideoResult] = useState([])
     const [showSuggestion, setShowsuggestion] = useState(false)
 
     const searchCache = useSelector(store => store.search);
@@ -47,18 +45,26 @@ const Head = () => {
     const toggleMenuHandler = () => {
         dispatch(toggleMenu())
     }
+    const hideButtonList = () => {
+        dispatch(closeButtonList())
+    } 
+    function useOutsideAlert(ref) {
+        useEffect(() => {
+            
+            function handleClickOutside(event) {
+                if (ref.current && ! ref.current.contains(event.target)) {
+                    setShowsuggestion(false)
+                }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside)
+            };
 
-    useEffect(() => {
-        getVideos();
-    }, [searchVideoQuery]);
-
-    const getVideos = async () => {
-        console.log("searchVideo", searchVideoQuery)
-        const data = await fetch(SEARCH_VIDEO_API.replace("query", searchVideoQuery));
-        const json = await data.json();
-        console.log("search videwo", json?.items)
-        setSearchVideoResult(json.items)
+        }, [ref])
     }
+    const wrapperRef = useRef(null);
+    useOutsideAlert(wrapperRef);
 
     return (
         <div className="flex justify-between w-full px-5 py-2 fixed top-0 bg-white">
@@ -78,21 +84,25 @@ const Head = () => {
                     <input value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowsuggestion(true)}
-                    onBlur={() => setShowsuggestion(false)}
+                    // onBlur={() => setShowsuggestion(false)}
                     className="w-[80%] border border-gray-400 px-3 py-2 rounded-l-full" type="text" placeholder="Search" />
                     <button className="w-[12%] border border-gray-400 p-2 rounded-r-full bg-gray-100 hover:bg-gray-200"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                     <FontAwesomeIcon icon={faMicrophone} className="w-7 ml-5 p-3 h-5 bg-gray-100 hover:bg-gray-200 rounded-full cursor-pointer" />
                 </div>
 
-                {showSuggestion && (<div className="fixed z-10 bg-white py-2 w-[37%] shadow-lg rounded-lg border-gray-100">
+                {showSuggestion && (<div ref={wrapperRef} className="fixed z-10 bg-white py-2 w-[37%] shadow-lg rounded-lg border-gray-100">
                     <ul>
                     {
                         suggestions.map((s) => (
-                            <Link to={"/result"} >
-                                <li key={s} onClick={() => setSearchVideoQuery(s)} className="py-2 shadow-sm px-2 hover:bg-gray-100 cursor-pointer">
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} /> {s}</li>
+                            <Link to={"/result?search_query="+s} key={s} onClick={() => {
+                                    setShowsuggestion(false);
+                                    hideButtonList();
+                                    }}>
+                                <li key={s} 
+                                    className="py-2 shadow-sm px-2 hover:bg-gray-100 cursor-pointer">
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} /> {s}
+                                </li>
                             </Link>
-                        
                         ))
                     }
                     </ul>
