@@ -10,7 +10,7 @@ const Sidebar = () => {
     
     // Early return pattern
     if (!isMenuOpen) return (
-        <div className="p-2  w-[5%] fixed bottom-0 top-16">
+        <div className="p-2  w-[5%] fixed bottom-0 top-12">
             <ul className="">
             <Link to={"/"}>
                 <li className="flex flex-col items-center gap-2 px-8  py-5 hover:bg-gray-200 rounded-xl cursor-pointer">
