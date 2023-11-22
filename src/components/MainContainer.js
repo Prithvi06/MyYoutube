@@ -4,10 +4,8 @@ import VideoContainer from "./VideoContainer";
 import { useSelector } from "react-redux";
 
 const MainContainer = () => {
-    const isMenuOpen = useSelector((store) => store.app.isMenuOpen)
     return (
-        <div className={`mt-16 ${isMenuOpen ? 'ml-60' : 'ml-40'}`}>
-            <ButtonList />
+        <div className="mt-14">
             <VideoContainer />
         </div>
     )   
