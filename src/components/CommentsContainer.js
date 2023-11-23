@@ -1,117 +1,76 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { COMMENT_API } from "../utils/config";
+import { timeSince, formatCash } from "../utils/helper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 
-const CommentsData = [
-    {
-        name: "Prithvi Raj",
-        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-        replies: []
-    },
-    {
-        name: "Prithvi Raj",
-        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-        replies: []
-    },
-    {
-        name: "Prithvi Raj",
-        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-        replies: [
-            {
-                name: "Prithvi Raj",
-                text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                replies: [
-                    {
-                        name: "Prithvi Raj",
-                        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                        replies: [
-                            {
-                                name: "Prithvi Raj",
-                                text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                                replies: [
-                                    {
-                                        name: "Prithvi Raj",
-                                        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                                        replies: []
-                                    },
-                                    {
-                                        name: "Prithvi Raj",
-                                        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                                        replies: []
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                ]
-            },
-            {
-                name: "Prithvi Raj",
-                text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                replies: []
-            },
-        ]
-    },
-    {
-        name: "Prithvi Raj",
-        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-        replies: [
-            {
-                name: "Prithvi Raj",
-                text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                replies: []
-            },
-        ]
-    },
-    {
-        name: "Prithvi Raj",
-        text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-        replies: [
-            {
-                name: "Prithvi Raj",
-                text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                replies: []
-            },
-            {
-                name: "Prithvi Raj",
-                text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.  voluptatibus fugit qui nostrum quibusdam ",
-                replies: []
-            },
-        ]
-    },
-]
 
-const Comment = ({data}) => {
-    const {name, text, replies} = data;
-    return (
-        <div className="flex shadow-sm bg-gray-100 p-2 rounded-lg">
-            <img className="h-10 w-10"
-                src="https://cdn-icons-png.flaticon.com/512/666/666201.png" alt="user" />
-            <div className="px-3">
-                <p className="font-bold">{name}</p>
-                <p>{text}</p>
+const Comment = ({data, isReply}) => {
+    const {snippet} = data
+    var {authorDisplayName, authorProfileImageUrl, likeCount, publishedAt, textDisplay} = snippet;
+    return !isReply ? (<></>) :
+     (
+        <div className="p-2">
+            <div className="flex">
+                <img className="mt-2 h-10 w-10 rounded-full" src={authorProfileImageUrl} alt="user" />
+                <div className="pl-4">
+                    <span className="text-xs font-semibold">@{authorDisplayName}</span>
+                    <span className="text-xs font-semibold pl-2">{timeSince(publishedAt)} ago</span>
+                    <p>{textDisplay}</p>
+                </div>
+            </div>
+            <div className="flex items-center py-2 ml-[55px]">
+                <FontAwesomeIcon icon={faThumbsUp} /> <span className="pl-1 pr-3">{formatCash(likeCount)}</span> <FontAwesomeIcon icon={faThumbsDown} />
             </div>
         </div>
     );
 };
 
 const CommentList = ({comments}) => {
-    console.log("commen", comments)
+    const [isReply, setIsReply] = useState()
     return comments.map((comment, index) => (
-        <div key={index}>
-            <Comment data={comment} />
-            <div className="pl-5 border border-l-black ml-5">
-                <CommentList comments={comment.replies} />
+        <div  key={comment.id} className="bg-gray-100">
+            <Comment data={comment?.snippet?.topLevelComment} isReply={true} />
+            <div className="pl-5 ml-5">
+                {
+                <button onClick={() => {
+                    setIsReply(index);
+                }}
+                    className="font-semibold text-sm pl-5 text-blue-600">
+                    Show reply</button>
+                }
+                {
+                    <button onClick={() => {
+                    setIsReply();
+                }}
+                    className="font-semibold text-sm pl-5 text-blue-600">
+                    Hide reply</button>
+                }
+                {comment?.replies?.comments?.map((comment) => 
+                        <Comment data={comment} isReply={isReply === index ? true : false} />
+                    )
+                }
             </div>
         </div>
     ));
 };
 
+const CommentsContainer = ({videoId}) => {
+    const [comments, setComments] = useState([]);
+    useEffect(() => {
+        getAllComments();
+    },[videoId]);
 
-const CommentsContainer = () => {
+    const getAllComments = async () => {
+        const data = await fetch(COMMENT_API.replace("vId", videoId))
+        const json = await data.json()
+        setComments(json.items)
+    }
 
     return (
-        <div className="m-5 p-2">
-            <h1 className="text-2xl font-bold">Comments:</h1>
-            <CommentList comments={CommentsData} />
+        <div className="mt-5">
+            <h1 className="font-bold text-xl">{comments?.length} Comments:</h1>
+            {comments && <CommentList comments={comments} />}
         </div>
     );
 };

@@ -23,16 +23,13 @@ const Head = () => {
             }
         }, 200);
         return () => {
-            console.log("clean")
             clearTimeout(timer);
         }
     }, [searchQuery])
 
     const getSearchSuggestion = async () => {
-        console.log(searchQuery)
         const data = await fetch(SEARCH_SUGGESTION_API + searchQuery)
         const json = await data.json();
-        console.log("suggestion", json[1])
         setSuggestions(json[1])
 
         // update cache
