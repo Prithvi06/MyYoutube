@@ -35,15 +35,14 @@ const LiveChat = () => {
     const ChatMessages = useSelector((store) => store.chat.messages)
 
     useEffect(() => {
-        // const i = setInterval(() => {
-        //     // API Polling
-        //     console.log("API Polling")
-        //     dispatch(addMessage({
-        //         name: generateRandomName(),
-        //         message: "Good morning 🙏"
-        //     }))
-        // }, 3000);
-        // return () => clearInterval(i);
+        const i = setInterval(() => {
+            // API Polling
+            dispatch(addMessage({
+                name: generateRandomName(),
+                message: "Good morning 🙏"
+            }))
+        }, 3000);
+        return () => clearInterval(i);
     }, []);
 
     return (
