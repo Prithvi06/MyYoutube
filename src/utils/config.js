@@ -1,5 +1,5 @@
 
-const GOOGLE_API_KEY = "AIzaSyBB9x3MFSBmh7YWvlaaIlfV-kmJhT_FM48"
+const GOOGLE_API_KEY = "AIzaSyDzJjkxU7Jf7JGDW4sn69Uj45s3JCOXn94"
 export const YOUTUBE_VIDEOS_API = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=50&regionCode=IN&key=" + GOOGLE_API_KEY
 
 export const SEARCH_SUGGESTION_API = "http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=";
