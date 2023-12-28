@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const Shimmer = ({isSearch}) => {
-    console.log("isSearch",isSearch)
     const isMenuOpen = useSelector((store) => store.app.isMenuOpen)
     return (
         <div className="mt-16">
